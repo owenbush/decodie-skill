@@ -86,7 +86,7 @@ The agent will:
 
 ### With DDEV
 
-If you use [DDEV](https://ddev.readthedocs.io/) for local development, the easiest way to browse your entries is with the Decodie add-on:
+If you use [DDEV](https://ddev.readthedocs.io/) for local development, the Decodie add-on installs everything — the UI and the skill — in a single command:
 
 ```bash
 ddev add-on get owenbush/decodie-ddev
@@ -94,17 +94,18 @@ ddev restart
 ddev decodie
 ```
 
-This opens the Decodie UI in your browser at `https://decodie.SITENAME.ddev.site`. Use `ddev decodie status` to see entry statistics.
+This opens the Decodie UI in your browser at `https://decodie.SITENAME.ddev.site`. No manual skill installation needed. Use `ddev decodie status` to see entry statistics.
 
 ### Without DDEV
 
-Run the UI directly with npx (requires Node.js 18+):
+Install the skill and run the UI with npx (requires Node.js 18+):
 
 ```bash
+npx @owenbush/decodie-ui install-skill
 npx @owenbush/decodie-ui serve
 ```
 
-This opens `http://localhost:8081` pointing at the current project directory.
+This installs the skill into `~/.claude/skills/decodie/` and opens `http://localhost:8081` pointing at the current project directory.
 
 ### Q&A mode: `/decodie ask`
 
