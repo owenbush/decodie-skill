@@ -107,6 +107,10 @@ npx @owenbush/decodie-ui serve
 
 This installs the skill into `~/.claude/skills/decodie/` and opens `http://localhost:8081` pointing at the current project directory.
 
+### Activating the skill
+
+Once installed, start a Claude Code session and run `/decodie` to activate the skill. It will then document coding decisions as you work. You need to activate it once per session.
+
 ### Q&A mode: `/decodie ask`
 
 Use `/decodie ask "your question"` to query your existing learning entries. The skill switches to read-only Q&A mode, finds the most relevant entry by keyword or entry ID, and answers your question using the entry content and live source code as context. After answering, it returns to normal generation mode.
