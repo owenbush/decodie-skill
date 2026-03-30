@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "project": "web-dashboard",
+  "entries": [
+    {
+      "id": "entry-1711540000-a1b2",
+      "title": "Why useEffect cleanup prevents memory leaks in React",
+      "experience_level": "foundational",
+      "topics": ["react", "hooks", "memory-management"],
+      "decision_type": "explanation",
+      "session_id": "2026-03-27-001",
+      "timestamp": "2026-03-27T09:15:00Z",
+      "lifecycle": "active",
+      "references": [
+        {
+          "file": "src/components/Dashboard.tsx",
+          "anchor": "useEffect(() => { const controller = new AbortController();",
+          "anchor_hash": "3f8a91c2"
+        }
+      ],
+      "external_docs": [
+        {
+          "label": "React docs: Synchronizing with Effects",
+          "url": "https://react.dev/learn/synchronizing-with-effects"
+        }
+      ],
+      "cross_references": ["entry-1711540300-c3d4"],
+      "content_file": "entries/entry-1711540000-a1b2.md",
+      "superseded_by": null
+    },
+    {
+      "id": "entry-1711540300-c3d4",
+      "title": "Prefer AbortController over boolean flags for fetch cancellation",
+      "experience_level": "intermediate",
+      "topics": ["react", "fetch", "abort-controller"],
+      "decision_type": "rationale",
+      "session_id": "2026-03-27-001",
+      "timestamp": "2026-03-27T09:20:00Z",
+      "lifecycle": "active",
+      "references": [
+        {
+          "file": "src/hooks/useFetchData.ts",
+          "anchor": "const controller = new AbortController();",
+          "anchor_hash": "b7e204f1"
+        }
+      ],
+      "external_docs": [
+        {
+          "label": "MDN: AbortController",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/AbortController"
+        }
+      ],
+      "cross_references": ["entry-1711540000-a1b2"],
+      "content_file": "entries/entry-1711540300-c3d4.md",
+      "superseded_by": null
+    },
+    {
+      "id": "entry-1711540600-e5f6",
+      "title": "Barrel exports considered harmful for tree-shaking",
+      "experience_level": "advanced",
+      "topics": ["bundling", "tree-shaking", "module-system"],
+      "decision_type": "warning",
+      "session_id": "2026-03-27-001",
+      "timestamp": "2026-03-27T09:30:00Z",
+      "lifecycle": "superseded",
+      "references": [
+        {
+          "file": "src/components/index.ts",
+          "anchor": "export * from './Button';",
+          "anchor_hash": "d91c4e08"
+        }
+      ],
+      "external_docs": [],
+      "cross_references": ["entry-1711541000-g7h8"],
+      "content_file": "entries/entry-1711540600-e5f6.md",
+      "superseded_by": "entry-1711541000-g7h8"
+    },
+    {
+      "id": "entry-1711541000-g7h8",
+      "title": "Use package.json sideEffects field to enable safe barrel exports",
+      "experience_level": "ecosystem",
+      "topics": ["bundling", "tree-shaking", "package-json"],
+      "decision_type": "pattern",
+      "session_id": "2026-03-27-001",
+      "timestamp": "2026-03-27T09:45:00Z",
+      "lifecycle": "active",
+      "references": [
+        {
+          "file": "package.json",
+          "anchor": "\"sideEffects\": false",
+          "anchor_hash": "a40f7c3b"
+        }
+      ],
+      "external_docs": [
+        {
+          "label": "Webpack: Tree Shaking",
+          "url": "https://webpack.js.org/guides/tree-shaking/"
+        }
+      ],
+      "cross_references": ["entry-1711540600-e5f6"],
+      "content_file": "entries/entry-1711541000-g7h8.md",
+      "superseded_by": null
+    }
+  ]
+}

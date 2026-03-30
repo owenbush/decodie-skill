@@ -1,0 +1,47 @@
+{
+  "session_id": "2026-03-27-001",
+  "timestamp_start": "2026-03-27T09:00:00Z",
+  "timestamp_end": "2026-03-27T10:30:00Z",
+  "summary": "Explored React effect cleanup patterns and module bundling strategies for the dashboard project.",
+  "entries": [
+    {
+      "id": "entry-1711540000-a1b2",
+      "title": "Why useEffect cleanup prevents memory leaks in React",
+      "code_snippet": "useEffect(() => {\n  const controller = new AbortController();\n  fetch('/api/data', { signal: controller.signal })\n    .then(res => res.json())\n    .then(setData)\n    .catch(err => {\n      if (err.name !== 'AbortError') throw err;\n    });\n  return () => controller.abort();\n}, []);",
+      "explanation": "When a component unmounts (or the effect re-runs), React calls the cleanup function returned by useEffect. Without cleanup, an in-flight fetch can resolve after unmount and call setState on an unmounted component, causing a memory leak and a React warning. Returning `() => controller.abort()` cancels the fetch on unmount so the promise rejects with an AbortError instead of completing.",
+      "alternatives_considered": "A boolean `isMounted` flag was considered (`let active = true; return () => { active = false; }`). This prevents the setState call but does NOT cancel the network request itself — the response still downloads, wasting bandwidth. AbortController is preferred because it cancels at the network layer.",
+      "key_concepts": [
+        "useEffect cleanup function",
+        "AbortController for fetch cancellation",
+        "Memory leaks from unmounted component state updates",
+        "Network-layer cancellation vs. application-layer guards"
+      ]
+    },
+    {
+      "id": "entry-1711540300-c3d4",
+      "title": "Prefer AbortController over boolean flags for fetch cancellation",
+      "code_snippet": "export function useFetchData(url: string) {\n  const [data, setData] = useState(null);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const controller = new AbortController();\n    fetch(url, { signal: controller.signal })\n      .then(res => {\n        if (!res.ok) throw new Error(res.statusText);\n        return res.json();\n      })\n      .then(setData)\n      .catch(err => {\n        if (err.name !== 'AbortError') setError(err);\n      });\n    return () => controller.abort();\n  }, [url]);\n\n  return { data, error };\n}",
+      "explanation": "AbortController sends an actual cancellation signal to the browser's network stack. When the signal fires, the browser tears down the TCP connection (or reuses it for other requests). A boolean flag only prevents your code from acting on the response — the full response body still downloads. This matters on slow networks or large payloads where wasted bandwidth adds up. AbortController also integrates with other APIs like EventSource and WebSocket adapters.",
+      "alternatives_considered": "The isMounted boolean pattern (`let cancelled = false; return () => { cancelled = true; }`) is simpler and works for preventing state updates, but it wastes network resources. Libraries like axios have their own CancelToken (now deprecated in favor of AbortController). TanStack Query handles this internally, so if the project adopts it later, the manual pattern can be removed.",
+      "key_concepts": [
+        "AbortController.signal passed to fetch",
+        "Network-level cancellation vs. response-level ignoring",
+        "AbortError handling in catch blocks",
+        "Custom hook encapsulation of fetch lifecycle"
+      ]
+    },
+    {
+      "id": "entry-1711541000-g7h8",
+      "title": "Use package.json sideEffects field to enable safe barrel exports",
+      "code_snippet": "// package.json\n{\n  \"sideEffects\": false\n}\n\n// src/components/index.ts (barrel)\nexport { Button } from './Button';\nexport { Card } from './Card';\nexport { Modal } from './Modal';",
+      "explanation": "Barrel files (index.ts that re-exports everything) can defeat tree-shaking because bundlers cannot statically prove that executing a module has no side effects. Setting `\"sideEffects\": false` in package.json tells the bundler that any module in the package can be safely dropped if its exports are unused. With this flag, `import { Button } from './components'` will only include Button's code, not Card or Modal. You can also use an array (`\"sideEffects\": [\"*.css\"]`) to mark specific files that DO have side effects.",
+      "alternatives_considered": "Removing barrel files entirely and using direct imports (`import { Button } from './components/Button'`) guarantees tree-shaking but hurts developer ergonomics and makes refactoring harder. The sideEffects approach preserves barrel convenience while enabling dead-code elimination. Another option is using build-time plugins like babel-plugin-transform-imports to rewrite barrel imports to direct imports.",
+      "key_concepts": [
+        "Tree-shaking and dead code elimination",
+        "Barrel (index) files and re-exports",
+        "sideEffects field in package.json",
+        "Static analysis limitations in bundlers"
+      ]
+    }
+  ]
+}

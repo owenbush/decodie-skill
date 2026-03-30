@@ -1,0 +1,12 @@
+{
+  "user_experience_level": "intermediate",
+  "preferred_topics": ["react", "typescript", "testing"],
+  "excluded_topics": ["devops"],
+  "archival_threshold_days": 60,
+  "auto_suggest_archival": true,
+  "show_external_docs": true,
+  "default_view": "active",
+  "sessions_visible_by_default": 3,
+  "api_key": null,
+  "api_model": null
+}
