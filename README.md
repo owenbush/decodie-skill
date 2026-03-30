@@ -82,6 +82,30 @@ The agent will:
 5. Mark entries as superseded when referenced code is rewritten or removed.
 6. Close the session when the conversation ends.
 
+## Viewing your entries
+
+### With DDEV
+
+If you use [DDEV](https://ddev.readthedocs.io/) for local development, the easiest way to browse your entries is with the Decodie add-on:
+
+```bash
+ddev add-on get owenbush/decodie-ddev
+ddev restart
+ddev decodie
+```
+
+This opens the Decodie UI in your browser at `https://decodie.SITENAME.ddev.site`. Use `ddev decodie status` to see entry statistics.
+
+### Without DDEV
+
+Run the UI directly with npx (requires Node.js 18+):
+
+```bash
+npx @owenbush/decodie-ui serve
+```
+
+This opens `http://localhost:8081` pointing at the current project directory.
+
 ### Q&A mode: `/decodie ask`
 
 Use `/decodie ask "your question"` to query your existing learning entries. The skill switches to read-only Q&A mode, finds the most relevant entry by keyword or entry ID, and answers your question using the entry content and live source code as context. After answering, it returns to normal generation mode.
@@ -116,7 +140,7 @@ See `schema/README.md` for detailed documentation of all fields, conventions, an
 
 ## Related repositories
 
-- [decodie.dev](https://owenbush.github.io/decodie) -- Project homepage and documentation.
+- [decodie.owenbush.dev](https://decodie.owenbush.dev) -- Project homepage and documentation.
 - [owenbush/decodie-ui](https://github.com/owenbush/decodie-ui) -- The presentation layer that renders a browsable interface for the `.decodie/` data.
 - [owenbush/decodie-ddev](https://github.com/owenbush/decodie-ddev) -- DDEV add-on that serves the UI as a DDEV service.
 
