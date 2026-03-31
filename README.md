@@ -73,12 +73,19 @@ The skill creates a `.decodie/` directory at the project root with the following
 
 You can commit `.decodie/` to share learning entries with your team, or add it to `.gitignore` to keep it personal. Both approaches work -- the data is self-contained.
 
-## How to use
+## Commands
 
-Just code normally with Claude Code. The skill activates automatically and generates entries as the agent works. There is nothing extra to do.
+Decodie provides three commands in Claude Code:
+
+### `/decodie:observe` — Document as you code
+
+Activate this at the start of a coding session. It documents decisions, patterns, and concepts as the agent writes code in real-time.
+
+```
+/decodie:observe
+```
 
 The agent will:
-
 1. Set up the `.decodie/` directory if it does not exist.
 2. Start a new session for the current coding interaction.
 3. Write a learning entry after each meaningful coding decision.
@@ -86,11 +93,33 @@ The agent will:
 5. Mark entries as superseded when referenced code is rewritten or removed.
 6. Close the session when the conversation ends.
 
+### `/decodie:analyze` — Analyze existing code
+
+Generate learning entries from existing code — even code that wasn't written with Claude:
+
+```
+/decodie:analyze src/auth/              # Analyze a directory
+/decodie:analyze src/utils/helpers.ts   # Analyze a single file
+/decodie:analyze                        # Analyze the whole project
+/decodie:analyze --exhaustive src/      # Document everything (default is 3-5 per file)
+```
+
+Analysis entries are stored in their own sessions (prefixed `analyze-`) so you can distinguish them from entries generated during coding. The same duplicate detection and cross-referencing applies.
+
+### `/decodie:ask` — Ask questions about entries
+
+Query your existing learning entries. Finds the most relevant entry by keyword or entry ID, and answers using the entry content and live source code as context.
+
+```
+/decodie:ask "why did we use the strategy pattern here?"
+/decodie:ask "entry-1711540000-a1b2"
+```
+
 ## Viewing your entries
 
 ### With DDEV
 
-If you use [DDEV](https://ddev.readthedocs.io/) for local development, the Decodie add-on installs everything — the UI and the skill — in a single command:
+If you use [DDEV](https://ddev.readthedocs.io/) for local development, the Decodie add-on installs everything — the UI and the commands — in one step:
 
 ```bash
 ddev add-on get owenbush/decodie-ddev
@@ -98,46 +127,18 @@ ddev restart
 ddev decodie
 ```
 
-This opens the Decodie UI in your browser at `https://decodie.SITENAME.ddev.site`. No manual skill installation needed. Use `ddev decodie status` to see entry statistics.
+This opens the Decodie UI in your browser at `https://decodie.SITENAME.ddev.site`. Use `ddev decodie status` to see entry statistics.
 
 ### Without DDEV
 
-Install the skill and run the UI with npx (requires Node.js 18+):
+Install the commands and run the UI with npx (requires Node.js 18+):
 
 ```bash
 npx @owenbush/decodie-ui install-skill
 npx @owenbush/decodie-ui serve
 ```
 
-This installs the skill into `~/.claude/skills/decodie/` and opens `http://localhost:8081` pointing at the current project directory.
-
-### Activating the skill
-
-Once installed, start a Claude Code session and run `/decodie` to activate the skill. It will then document coding decisions as you work. You need to activate it once per session.
-
-### Analyzing existing code: `/decodie-analyze`
-
-Use `/decodie-analyze` to generate learning entries from existing code — even code that wasn't written with Claude:
-
-```
-/decodie-analyze src/auth/              # Analyze a directory
-/decodie-analyze src/utils/helpers.ts   # Analyze a single file
-/decodie-analyze                        # Analyze the whole project
-/decodie-analyze --exhaustive src/      # Document everything (default is 3-5 per file)
-```
-
-Analysis entries are stored in their own sessions (prefixed `analyze-`) so you can distinguish them from entries generated during coding. The same duplicate detection and cross-referencing applies.
-
-### Q&A mode: `/decodie ask`
-
-Use `/decodie ask "your question"` to query your existing learning entries. The skill switches to read-only Q&A mode, finds the most relevant entry by keyword or entry ID, and answers your question using the entry content and live source code as context. After answering, it returns to normal generation mode.
-
-```
-/decodie ask "why did we use the strategy pattern here?"
-/decodie ask "entry-1711540000-a1b2"
-```
-
-If no entries match, the skill will suggest browsing the index directly.
+This installs the commands into `~/.claude/commands/decodie/` and opens `http://localhost:8081` pointing at the current project directory.
 
 ## Preprocessing script
 
