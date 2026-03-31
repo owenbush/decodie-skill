@@ -19,29 +19,33 @@ Entries are tagged by experience level (`foundational` through `advanced`), deci
 
 ## Installation
 
-### Personal (all projects)
-
-Copy the skill files into your personal Claude Code skills directory:
+The easiest way to install is via npm:
 
 ```bash
-mkdir -p ~/.claude/skills/decodie
-cp SKILL.md ~/.claude/skills/decodie/
-cp -r scripts/ ~/.claude/skills/decodie/scripts/
+npx @owenbush/decodie-ui install-skill
 ```
 
-The skill will be available in every project you open with Claude Code.
+This downloads `SKILL.md`, `SKILL-ANALYZE.md`, and scripts into `~/.claude/skills/decodie/`. The skills will be available in every project you open with Claude Code.
 
 ### Project-level (shared with team)
 
-Copy the skill files into the project's Claude Code skills directory:
+To install at project level so the skill is shared via version control:
 
 ```bash
-mkdir -p .claude/skills/decodie
-cp SKILL.md .claude/skills/decodie/
-cp -r scripts/ .claude/skills/decodie/scripts/
+npx @owenbush/decodie-ui install-skill --scope project
 ```
 
-Commit the `.claude/skills/` directory to version control so that anyone who clones the repo gets the skill automatically.
+This installs into `.claude/skills/decodie/` in your project directory. Commit it to share with your team.
+
+### Manual installation
+
+If you prefer not to use npm, copy the files manually:
+
+```bash
+mkdir -p ~/.claude/skills/decodie
+cp SKILL.md SKILL-ANALYZE.md ~/.claude/skills/decodie/
+cp -r scripts/ ~/.claude/skills/decodie/scripts/
+```
 
 ### Enterprise / Team plans
 
@@ -110,6 +114,19 @@ This installs the skill into `~/.claude/skills/decodie/` and opens `http://local
 ### Activating the skill
 
 Once installed, start a Claude Code session and run `/decodie` to activate the skill. It will then document coding decisions as you work. You need to activate it once per session.
+
+### Analyzing existing code: `/decodie-analyze`
+
+Use `/decodie-analyze` to generate learning entries from existing code — even code that wasn't written with Claude:
+
+```
+/decodie-analyze src/auth/              # Analyze a directory
+/decodie-analyze src/utils/helpers.ts   # Analyze a single file
+/decodie-analyze                        # Analyze the whole project
+/decodie-analyze --exhaustive src/      # Document everything (default is 3-5 per file)
+```
+
+Analysis entries are stored in their own sessions (prefixed `analyze-`) so you can distinguish them from entries generated during coding. The same duplicate detection and cross-referencing applies.
 
 ### Q&A mode: `/decodie ask`
 
