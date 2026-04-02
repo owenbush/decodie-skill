@@ -104,7 +104,41 @@ Generate learning entries from existing code — even code that wasn't written w
 /decodie:analyze --exhaustive src/      # Document everything (default is 3-5 per file)
 ```
 
+By default, analyze runs in **selective mode** — it picks the 3–5 most significant, non-obvious patterns per file. Add the `--exhaustive` flag to document every meaningful pattern without per-file limits.
+
 Analysis entries are stored in their own sessions (prefixed `analyze-`) so you can distinguish them from entries generated during coding. The same duplicate detection and cross-referencing applies.
+
+#### Source annotations
+
+You can place annotation markers in source code comments to control what `/decodie:analyze` documents. These markers work in both selective and exhaustive modes and do not affect unannotated code.
+
+Two actions are available — `@decodie-include` (always analyze) and `@decodie-ignore` (never analyze) — each with a scope modifier:
+
+| Marker | Scope |
+|---|---|
+| `@decodie-include:file` | Entire file |
+| `@decodie-include:class` | Next class/interface/enum |
+| `@decodie-include:function` | Next function/method |
+| `@decodie-include:start` / `end` | Block region |
+| `@decodie-ignore:file` | Entire file |
+| `@decodie-ignore:class` | Next class/interface/enum |
+| `@decodie-ignore:function` | Next function/method |
+| `@decodie-ignore:start` / `end` | Block region |
+
+Markers are recognized inside any comment syntax (`//`, `#`, `/* */`, `<!-- -->`, etc.). `@decodie-ignore` always takes precedence over `@decodie-include` when scopes overlap. Included code does not count against the 3–5 entry limit in selective mode.
+
+```php
+/**
+ * @decodie-ignore:class
+ */
+class GeneratedFormHandler { ... }
+```
+
+```python
+# @decodie-include:function
+def calculate_risk_score(portfolio):
+    ...
+```
 
 ### `/decodie:ask` — Ask questions about entries
 
