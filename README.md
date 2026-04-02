@@ -200,6 +200,8 @@ See `schema/README.md` for detailed documentation of all fields, conventions, an
 - [decodie.owenbush.dev](https://decodie.owenbush.dev) -- Project homepage and documentation.
 - [owenbush/decodie-ui](https://github.com/owenbush/decodie-ui) -- The presentation layer that renders a browsable interface for the `.decodie/` data.
 - [owenbush/decodie-ddev](https://github.com/owenbush/decodie-ddev) -- DDEV add-on that serves the UI as a DDEV service.
+- [owenbush/decodie-vscode](https://github.com/owenbush/decodie-vscode) -- VSCode extension with sidebar entry browser and right-click analysis.
+- [owenbush/decodie-core](https://github.com/owenbush/decodie-core) -- Shared data layer (types, parser, reference resolver).
 
 ## Compatibility
 
