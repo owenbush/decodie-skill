@@ -114,6 +114,21 @@
         "superseded_by": {
           "type": ["string", "null"],
           "description": "ID of the entry that replaced this one, or null if still current."
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Denormalized list of source file paths this entry references. Backfilled from references[].file by /decodie:verify and used by /decodie:flag-stale for fast file-change lookups."
+        },
+        "verified_sha": {
+          "type": "string",
+          "description": "Git commit SHA at which this entry was last verified. Set by /decodie:verify when all anchors resolve. Compared against HEAD by /decodie:flag-stale to detect changes."
+        },
+        "stale": {
+          "type": "boolean",
+          "description": "True if any of the entry's source files have changed since verified_sha (set by /decodie:flag-stale), or if anchors no longer resolve (set by /decodie:verify)."
         }
       }
     },

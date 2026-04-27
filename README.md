@@ -75,7 +75,7 @@ You can commit `.decodie/` to share learning entries with your team, or add it t
 
 ## Commands
 
-Decodie provides three commands in Claude Code:
+Decodie provides five commands in Claude Code:
 
 ### `/decodie:observe` — Document as you code
 
@@ -148,6 +148,27 @@ Query your existing learning entries. Finds the most relevant entry by keyword o
 /decodie:ask "why did we use the strategy pattern here?"
 /decodie:ask "entry-1711540000-a1b2"
 ```
+
+### `/decodie:verify` — Confirm entries still match the code
+
+Walk every entry's references, confirm the anchored code still resolves, and stamp confirmed entries with the current commit SHA so future staleness checks have a baseline. Marks any entry whose anchor no longer resolves as `stale: true`.
+
+```
+/decodie:verify              # Verify all entries
+/decodie:verify src/auth/    # Verify only entries that reference files under src/auth/
+```
+
+This is the deep check — it reads each referenced file. Run it after large refactors or before publishing entries.
+
+### `/decodie:flag-stale` — Detect entries affected by recent changes
+
+The cheap counterpart to `/decodie:verify`, designed for CI on every PR. For each entry with a `verified_sha`, runs `git diff --name-only verified_sha..HEAD` and flips `stale: true` on entries whose source files appear in the diff. No source files are read.
+
+```
+/decodie:flag-stale
+```
+
+`flag-stale` only sets the flag — clearing it requires running `/decodie:verify` to re-check the anchors. The output is machine-friendly so wrapping tools (such as `decodie-github-action`) can decide whether stale entries should block a PR.
 
 ## Viewing your entries
 
