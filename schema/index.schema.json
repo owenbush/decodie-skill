@@ -68,12 +68,12 @@
         },
         "decision_type": {
           "type": "string",
-          "enum": ["explanation", "rationale", "pattern", "warning", "convention"],
+          "enum": ["explanation", "rationale", "pattern", "warning", "convention", "overview"],
           "description": "What kind of learning this entry represents."
         },
         "session_id": {
           "type": "string",
-          "pattern": "^(analyze-|explain-)?\\d{4}-\\d{2}-\\d{2}-\\d{3}$",
+          "pattern": "^(analyze-|explain-|overview-)?\\d{4}-\\d{2}-\\d{2}-\\d{3}$",
           "description": "The session that produced this entry (YYYY-MM-DD-NNN)."
         },
         "timestamp": {

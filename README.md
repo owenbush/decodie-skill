@@ -15,7 +15,7 @@ While you code with Claude Code, the Decodie skill observes each meaningful deci
 - **Where** it lives (content-based code references that survive refactoring)
 - **Related resources** (links to official docs for PHP, JavaScript, Python, React, and more)
 
-Entries are tagged by experience level (`foundational` through `advanced`), decision type (`explanation`, `rationale`, `pattern`, `warning`, `convention`), and topic. Duplicate concepts are detected and cross-referenced automatically.
+Entries are tagged by experience level (`foundational` through `advanced`), decision type (`explanation`, `rationale`, `pattern`, `warning`, `convention`, `overview`), and topic. Duplicate concepts are detected and cross-referenced automatically.
 
 ## Installation
 
@@ -75,7 +75,7 @@ You can commit `.decodie/` to share learning entries with your team, or add it t
 
 ## Commands
 
-Decodie provides five commands in Claude Code:
+Decodie provides six commands in Claude Code:
 
 ### `/decodie:observe` — Document as you code
 
@@ -139,6 +139,20 @@ class GeneratedFormHandler { ... }
 def calculate_risk_score(portfolio):
     ...
 ```
+
+### `/decodie:overview` — Summarize a file, directory, or project
+
+Generate a high-level overview entry — purpose, structure, entry points, and dependencies — for a target file, directory, or the whole project. Useful as an onboarding starting point before drilling in with `/decodie:analyze` or `/decodie:explain`.
+
+```
+/decodie:overview src/auth/              # Overview a directory
+/decodie:overview src/utils/helpers.ts   # Overview a single file
+/decodie:overview                        # Overview the whole project
+```
+
+Overview entries are persisted (unlike `/decodie:explain`, which is ephemeral by default) so they can be browsed and shared. Re-running on the same target overwrites the existing overview in place rather than accumulating versions — if the underlying code has changed, just re-run.
+
+Overview sessions are stored with the `overview-` prefix to keep them distinguishable from observe and analyze sessions.
 
 ### `/decodie:ask` — Ask questions about entries
 
