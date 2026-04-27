@@ -64,3 +64,13 @@ The hash allows fast detection of stale anchors: if the anchor text no longer ap
 | `active`      | Current and relevant                                      |
 | `archived`    | No longer relevant but retained for history               |
 | `superseded`  | Replaced by a newer entry (see `superseded_by` field)     |
+
+### Verification
+
+Three optional fields support keeping entries in sync with the code they reference:
+
+- **`sources`** — denormalized list of file paths the entry touches, derived from `references[].file`. Used for fast file-change lookups without walking the full reference array.
+- **`verified_sha`** — git commit SHA at which the entry was last confirmed to still match the code.
+- **`stale`** — `true` when any source file has changed since `verified_sha` or when an anchor no longer resolves; `false` when freshly verified; absent when never verified.
+
+`/decodie:verify` does the deep check (reads files, confirms anchors still resolve) and updates `verified_sha`. `/decodie:flag-stale` does the cheap check (`git diff --name-only verified_sha..HEAD`) and is suitable for CI on every PR.
