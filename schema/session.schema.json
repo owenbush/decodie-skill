@@ -9,7 +9,7 @@
   "properties": {
     "session_id": {
       "type": "string",
-      "pattern": "^(analyze-|explain-)?\\d{4}-\\d{2}-\\d{2}-\\d{3}$",
+      "pattern": "^(analyze-|explain-|overview-)?\\d{4}-\\d{2}-\\d{2}-\\d{3}$",
       "description": "Unique session identifier (YYYY-MM-DD-NNN)."
     },
     "timestamp_start": {
@@ -37,14 +37,6 @@
   "definitions": {
     "session_entry": {
       "type": "object",
-      "required": [
-        "id",
-        "title",
-        "code_snippet",
-        "explanation",
-        "alternatives_considered",
-        "key_concepts"
-      ],
       "additionalProperties": true,
       "properties": {
         "id": {
@@ -55,25 +47,62 @@
           "type": "string",
           "description": "Short title for the learning."
         },
+        "decision_type": {
+          "type": "string",
+          "enum": ["explanation", "rationale", "pattern", "warning", "convention", "overview"],
+          "description": "Optional discriminator denormalized from the index entry. When present and set to 'overview', the entry uses the overview field shape (purpose/structure/...) instead of the default explanation shape (code_snippet/explanation/...)."
+        },
         "code_snippet": {
           "type": "string",
-          "description": "Relevant code snippet that prompted or illustrates the learning."
+          "description": "Relevant code snippet that prompted or illustrates the learning. Required for non-overview entries."
         },
         "explanation": {
           "type": "string",
-          "description": "Detailed explanation of the concept, decision, or pattern."
+          "description": "Detailed explanation of the concept, decision, or pattern. Required for non-overview entries."
         },
         "alternatives_considered": {
           "type": "string",
-          "description": "Other approaches that were considered and why this one was chosen."
+          "description": "Other approaches that were considered and why this one was chosen. Required for non-overview entries."
         },
         "key_concepts": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Core concepts the reader should take away."
+          "description": "Core concepts the reader should take away. Required for non-overview entries."
+        },
+        "purpose": {
+          "type": "string",
+          "description": "What the target code is for, in 2-4 sentences. Leads with intent. Required for overview entries."
+        },
+        "structure": {
+          "type": "string",
+          "description": "How the target code is organized — major sections/exports for a file, key modules for a directory, top-level layout for a project. Required for overview entries."
+        },
+        "entry_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Callable surfaces a developer would interact with (exported functions, CLI commands, HTTP routes, framework hooks). Optional on overview entries; omit when not meaningful."
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Notable internal or external dependencies and what they provide. Optional on overview entries; omit when nothing of structural significance applies."
         }
+      },
+      "if": {
+        "properties": { "decision_type": { "const": "overview" } },
+        "required": ["decision_type"]
+      },
+      "then": {
+        "required": ["id", "title", "decision_type", "purpose", "structure"]
+      },
+      "else": {
+        "required": ["id", "title", "code_snippet", "explanation", "alternatives_considered", "key_concepts"]
       }
     }
   }

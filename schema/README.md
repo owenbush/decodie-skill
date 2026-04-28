@@ -28,6 +28,8 @@ Optional user preferences. Every field has a sensible default, so the file can b
 
 Format: `YYYY-MM-DD-NNN` where `NNN` is a zero-padded sequence number starting at `001` for each calendar day. Examples: `2026-03-27-001`, `2026-03-27-002`.
 
+Sessions produced by the batch commands are prefixed: `analyze-YYYY-MM-DD-NNN`, `explain-YYYY-MM-DD-NNN`, and `overview-YYYY-MM-DD-NNN`. Sequence numbers increment per-prefix per-day.
+
 ### Reference anchoring
 
 Entries reference source code via content-based anchors rather than line numbers (which shift on every edit). Each reference stores:
@@ -56,6 +58,7 @@ The hash allows fast detection of stale anchors: if the anchor text no longer ap
 | `pattern`     | A reusable code pattern or technique                      |
 | `warning`     | A pitfall, anti-pattern, or common mistake                |
 | `convention`  | A project-specific style or structural agreement          |
+| `overview`    | High-level summary of a file, directory, or project       |
 
 ### Lifecycle
 
@@ -74,3 +77,16 @@ Three optional fields support keeping entries in sync with the code they referen
 - **`stale`** — `true` when any source file has changed since `verified_sha` or when an anchor no longer resolves; `false` when freshly verified; absent when never verified.
 
 `/decodie:verify` does the deep check (reads files, confirms anchors still resolve) and updates `verified_sha`. `/decodie:flag-stale` does the cheap check (`git diff --name-only verified_sha..HEAD`) and is suitable for CI on every PR.
+
+### Overview entries
+
+Entries with `decision_type: "overview"` use a different content shape than the other decision types. Instead of `code_snippet` / `explanation` / `alternatives_considered` / `key_concepts`, an overview session entry carries:
+
+- **`purpose`** (required) — what the target code is for, in 2–4 sentences.
+- **`structure`** (required) — how the target is organized.
+- **`entry_points`** (optional) — callable surfaces a developer would interact with.
+- **`dependencies`** (optional) — notable internal or external dependencies.
+
+The session-entry schema discriminates on `decision_type`: when present and set to `"overview"`, the overview-shape required fields apply; otherwise the default required fields apply (preserving compatibility with existing sessions, which do not carry `decision_type` on the session entry).
+
+Overviews are scoped to exactly one target — `sources` holds a single canonical path. Re-running `/decodie:overview` on the same target overwrites the existing entry in place rather than creating a superseded chain. Old session files are left on disk but no longer referenced from the index.
