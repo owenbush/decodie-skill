@@ -1,5 +1,4 @@
 {
-  "user_experience_level": "intermediate",
   "preferred_topics": ["react", "typescript", "testing"],
   "excluded_topics": ["devops"],
   "archival_threshold_days": 60,

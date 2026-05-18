@@ -93,7 +93,6 @@ If and only if the user explicitly asks to save the explanation, follow this per
    - `.decodie/config.json` containing:
      ```json
      {
-       "user_experience_level": "intermediate",
        "preferred_topics": [],
        "excluded_topics": [],
        "archival_threshold_days": 90,
