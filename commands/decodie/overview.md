@@ -48,7 +48,6 @@ Perform the following setup before generation begins:
    - `.decodie/config.json` containing:
      ```json
      {
-       "user_experience_level": "intermediate",
        "preferred_topics": [],
        "excluded_topics": [],
        "archival_threshold_days": 90,
