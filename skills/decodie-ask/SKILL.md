@@ -1,4 +1,16 @@
-# Ask Mode
+---
+name: decodie-ask
+description: >-
+  Ask a question about an existing Decodie learning entry and get a deeper
+  explanation using the entry content and live source code as context. Read-only
+  — does not create or modify entries.
+license: MIT
+metadata:
+  author: owenbush
+  version: "1.0"
+---
+
+# Decodie — Ask Mode
 
 Help the user explore and deepen their understanding of existing learning entries in the `.decodie/` directory.
 

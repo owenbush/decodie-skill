@@ -1,4 +1,17 @@
-# Flag Stale Mode
+---
+name: decodie-flag-stale
+description: >-
+  Fast CI-friendly check for entries whose source files have changed since last
+  verification. Compares entry source files against git diff without reading
+  source code. Flags stale entries in index.json. Use in CI pipelines or before
+  releases to detect outdated documentation.
+license: MIT
+metadata:
+  author: owenbush
+  version: "1.0"
+---
+
+# Decodie — Flag Stale Mode
 
 Fast, CI-friendly counterpart to verify mode. For every entry with a `verified_sha`, check whether any of its source files have changed since that SHA, and flip `stale: true` on entries that have. Does not read source files or recompute anchor hashes — only diffs filenames against git history.
 

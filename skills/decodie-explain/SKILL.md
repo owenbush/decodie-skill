@@ -1,4 +1,16 @@
-# Explain Mode
+---
+name: decodie-explain
+description: >-
+  Explain a selected piece of code — what it does, how it works, potential
+  issues, and improvement suggestions. Ephemeral by default (chat only),
+  optionally saved to .decodie/ on explicit request.
+license: MIT
+metadata:
+  author: owenbush
+  version: "1.0"
+---
+
+# Decodie — Explain Mode
 
 Walk a developer through a specific piece of code they have selected or pasted. Produces a conversational, human-readable explanation directly in the chat.
 
@@ -52,7 +64,12 @@ Only persist if the user explicitly asks ("save this", "keep this as an entry", 
 
 ### Setup
 
-Perform the common setup from the main skill file. Use session ID pattern `explain-YYYY-MM-DD-NNN`.
+1. Check if `.decodie/` exists at the project root. If not, create it:
+   - `.decodie/index.json` with `{ "version": "1.0", "project": "<directory-name>", "entries": [] }`
+   - `.decodie/config.json` with default preferences
+   - `.decodie/sessions/` directory
+
+2. Determine session ID. Find the highest `NNN` for today in `.decodie/sessions/` matching `explain-YYYY-MM-DD-NNN`, then increment.
 
 ### Session entry fields
 
@@ -67,11 +84,24 @@ Write to the session file with:
 
 ### Index entry
 
-Set `decision_type` to `"explanation"`. If the code came from an identifiable file, include a reference with content-based anchoring. If pasted without a known origin, `references` may be empty.
+- **`id`**: Format: `entry-{unix-timestamp}-{random-4-hex-chars}`
+- **`decision_type`**: `"explanation"`
+- **`content_file`**: relative path to session file, e.g. `sessions/explain-2026-03-27-001.json`
+
+If the code came from an identifiable file, include a reference with content-based anchoring:
+- **`file`** — relative path from project root
+- **`anchor`** — function signature, class declaration, or distinctive code block
+- **`anchor_hash`** — first 8 hex chars of SHA-256 of the anchor text (`echo -n "<anchor_text>" | shasum -a 256 | cut -c1-8`)
+
+If pasted without a known origin, `references` may be empty.
 
 ### Session Closure
 
 Set `timestamp_end`, write a brief `summary`, and confirm: "Saved explanation as entry `<id>` in session `<session_id>`."
+
+## Data Format
+
+See [references/schema.md](references/schema.md) for the full `.decodie/` data format.
 
 ## Important Notes
 

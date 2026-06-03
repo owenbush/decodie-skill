@@ -4,13 +4,13 @@
 
 **Turn every coding session into a structured learning trail.**
 
-An [Agent Skill](https://agentskills.io/specification) that generates structured learning entries as a byproduct of AI-assisted coding sessions. As the agent writes code, it simultaneously documents the reasoning, patterns, and language features used -- producing a cumulative, browsable knowledge base in a `.decodie/` directory.
+A collection of [Agent Skills](https://agentskills.io/specification) that generate structured learning entries as a byproduct of AI-assisted coding sessions. As the agent writes code, the skills simultaneously document the reasoning, patterns, and language features used -- producing a cumulative, browsable knowledge base in a `.decodie/` directory.
 
 Compatible with 70+ AI coding agents including Claude Code, Gemini CLI, Cursor, Cline, Windsurf, and more.
 
 ## What it does
 
-While you code with an AI agent, the Decodie skill observes each meaningful decision the agent makes and writes a structured learning entry capturing:
+While you code with an AI agent, the Decodie skills observe each meaningful decision the agent makes and write structured learning entries capturing:
 
 - **What** the code does (code snippets, key concepts)
 - **Why** this approach was chosen (rationale, alternatives considered)
@@ -24,23 +24,20 @@ Entries are tagged by experience level (`foundational` through `advanced`), deci
 Install with the [Skills CLI](https://github.com/vercel-labs/skills):
 
 ```bash
-npx skills add owenbush/decodie-skill
-```
+# Install all skills
+npx skills add owenbush/decodie-skill --all
 
-This installs the Decodie skill for your agent of choice. For Claude Code, it lands in `.claude/skills/decodie/`.
+# Install a specific skill
+npx skills add owenbush/decodie-skill -s decodie-analyze
 
-### Install for a specific agent
-
-```bash
-npx skills add owenbush/decodie-skill -a claude-code
-npx skills add owenbush/decodie-skill -a cursor
-npx skills add owenbush/decodie-skill -a gemini-cli
+# Install for a specific agent
+npx skills add owenbush/decodie-skill --all -a claude-code
 ```
 
 ### Global install (all projects)
 
 ```bash
-npx skills add owenbush/decodie-skill -g
+npx skills add owenbush/decodie-skill --all -g
 ```
 
 ### Legacy installation
@@ -59,7 +56,7 @@ npx @owenbush/decodie-ui install-skill --scope project
 
 ## What gets generated
 
-The skill creates a `.decodie/` directory at the project root with the following structure:
+The skills create a `.decodie/` directory at the project root with the following structure:
 
 ```
 .decodie/
@@ -79,41 +76,17 @@ The skill creates a `.decodie/` directory at the project root with the following
 
 You can commit `.decodie/` to share learning entries with your team, or add it to `.gitignore` to keep it personal.
 
-## Modes
+## Skills
 
-The Decodie skill supports seven modes:
-
-### Observe — Document as you code
-
-Activate at the start of a coding session. Documents decisions, patterns, and concepts as the agent writes code in real-time. Creates entries interleaved with normal coding work, detects duplicates, and tracks supersession when code is rewritten.
-
-### Analyze — Analyze existing code
-
-Generate learning entries from existing code retroactively. Works on files, directories, or entire projects.
-
-- **Selective mode** (default): 3-5 most significant patterns per file
-- **Exhaustive mode**: every meaningful pattern without limits
-- **Source annotations**: `@decodie-include` and `@decodie-ignore` markers in code comments control what gets documented
-
-### Overview — Summarize a file, directory, or project
-
-Generate a high-level overview entry — purpose, structure, entry points, and dependencies. Persisted by default. Re-running on the same target overwrites the existing overview.
-
-### Explain — Explain a code selection
-
-Detailed explanation of a specific code selection: summary, breakdowns, potential issues, improvements, and key concepts. Ephemeral by default (chat only) — persisted to `.decodie/` only on explicit request.
-
-### Ask — Ask questions about entries
-
-Query existing learning entries. Finds the most relevant entry by keyword or ID and answers using the entry content and live source code as context.
-
-### Verify — Confirm entries match the code
-
-Walk every entry's references, confirm anchored code still resolves, and stamp confirmed entries with the current commit SHA. Marks mismatches as `stale: true`.
-
-### Flag Stale — Detect entries affected by recent changes
-
-Fast CI-friendly check. For each verified entry, runs `git diff --name-only` and flags entries whose source files have changed. No source files are read — based purely on git history.
+| Skill | Description |
+|-------|-------------|
+| `decodie-observe` | Document decisions as you code in real-time |
+| `decodie-analyze` | Analyze existing code retroactively (selective or exhaustive) |
+| `decodie-overview` | Generate a high-level summary of a file, directory, or project |
+| `decodie-explain` | Explain a code selection (ephemeral by default) |
+| `decodie-ask` | Ask questions about existing entries |
+| `decodie-verify` | Confirm entries still match source code and stamp with commit SHA |
+| `decodie-flag-stale` | Fast CI-friendly check for entries affected by recent changes |
 
 ## Viewing your entries
 

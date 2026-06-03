@@ -1,4 +1,17 @@
-# Verify Mode
+---
+name: decodie-verify
+description: >-
+  Verify that learning entries still match the source code they reference.
+  Resolves content-based anchors, stamps confirmed entries with the current
+  commit SHA, and marks mismatches as stale. Use to maintain entry accuracy
+  after code changes.
+license: MIT
+metadata:
+  author: owenbush
+  version: "1.0"
+---
+
+# Decodie — Verify Mode
 
 Confirm that every learning entry in `.decodie/index.json` still matches the source code it references, mark mismatches as stale, and stamp confirmed entries with the current commit SHA.
 

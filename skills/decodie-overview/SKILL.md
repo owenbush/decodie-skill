@@ -1,4 +1,17 @@
-# Overview Mode
+---
+name: decodie-overview
+description: >-
+  Generate a high-level overview of a file, directory, or project — answering
+  "what is this and how is it organized." Produces a single summary entry
+  covering purpose, structure, entry points, and dependencies. Re-running on
+  the same target overwrites the existing overview.
+license: MIT
+metadata:
+  author: owenbush
+  version: "1.0"
+---
+
+# Decodie — Overview Mode
 
 Generate a high-level overview of a file, directory, or project — answering "what is this and how is it organized" rather than line-by-line explanations. Produces a single summary entry per target, intended as an onboarding starting point.
 
@@ -20,7 +33,18 @@ This mode is read-only with respect to source code. You only read source files a
 
 ## Setup
 
-Perform the common setup described in the main skill file. Use session ID pattern `overview-YYYY-MM-DD-NNN`.
+1. Check if `.decodie/` exists at the project root. If not, create it:
+   - `.decodie/index.json` with `{ "version": "1.0", "project": "<directory-name>", "entries": [] }`
+   - `.decodie/config.json` with default preferences
+   - `.decodie/sessions/` directory
+
+2. Load the index summary. Run:
+   ```bash
+   bash scripts/summarize-index.sh "$(pwd)"
+   ```
+   If unavailable, read `.decodie/index.json` directly.
+
+3. Determine session ID. Find the highest `NNN` for today in `.decodie/sessions/` matching `overview-YYYY-MM-DD-NNN`, then increment.
 
 ## Regeneration vs Fresh Entry
 
@@ -51,7 +75,7 @@ Before generating, check for an existing overview:
 
 ### Index entry metadata
 
-- **`id`**: Reuse existing for regeneration; generate fresh otherwise.
+- **`id`**: Reuse existing for regeneration; generate fresh otherwise. Format: `entry-{unix-timestamp}-{random-4-hex-chars}`
 - **`title`**: e.g., "Overview: `src/auth/` — token issuance and verification"
 - **`experience_level`**: `"foundational"` (overviews are onboarding entry points).
 - **`decision_type`**: `"overview"`
@@ -59,10 +83,16 @@ Before generating, check for an existing overview:
 - **`lifecycle`**: `"active"`
 - **`sources`**: Array with exactly one entry — the canonicalized target path.
 - **`references`**: For single-file overviews, one reference to the file. For directory/project, empty array.
+- **`content_file`**: relative path to session file, e.g. `sessions/overview-2026-03-27-001.json`
 
-### Session entry content
+### Session entry content (overview shape)
 
-Use the overview shape: `decision_type`, `purpose`, `structure`, `entry_points` (optional), `dependencies` (optional).
+Use the overview shape — different from standard entries:
+- **`decision_type`**: `"overview"`
+- **`purpose`** (required) — what the target code is for
+- **`structure`** (required) — how the target is organized
+- **`entry_points`** (optional) — callable surfaces
+- **`dependencies`** (optional) — notable dependencies
 
 ## Session Closure
 
@@ -72,8 +102,14 @@ Use the overview shape: `decision_type`, `purpose`, `structure`, `entry_points` 
    - Fresh: "Generated overview for `<target>` as entry `<id>` in session `<session_id>`."
    - Regeneration: "Regenerated overview for `<target>` (entry `<id>`)."
 
+## Data Format
+
+See [references/schema.md](references/schema.md) for the full `.decodie/` data format.
+
 ## Important Notes
 
 - **Always-latest, not append-only.** Re-running overwrites the index entry.
 - **One entry per target.** Do not fan out to per-file entries — that is analyze mode's job.
 - **Be honest about uncertainty.** If the target's purpose is ambiguous, say so.
+- **Language-agnostic.** Adapt to whatever language and framework the project uses.
+- **Self-contained data.** The `.decodie/` directory can be removed without affecting the project.
