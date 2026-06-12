@@ -60,7 +60,7 @@ Bulleted list of core patterns, principles, and language features to take away.
 
 ## Saving an Explanation (on explicit request only)
 
-Only persist if the user explicitly asks ("save this", "keep this as an entry", "write this to decodie").
+Only persist when the user explicitly requests it.
 
 ### Setup
 
@@ -105,6 +105,6 @@ See [references/schema.md](references/schema.md) for the full `.decodie/` data f
 
 ## Important Notes
 
-- **Ephemeral unless asked.** Do not touch `.decodie/` unless the user explicitly requests persistence.
+- **Ephemeral unless asked.** Only write to `.decodie/` when the user explicitly requests persistence.
 - **Calibrate depth to the code.** A five-line utility does not need five breakdowns.
 - **Be honest about uncertainty.** If code is ambiguous, say so.

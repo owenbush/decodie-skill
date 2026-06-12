@@ -14,7 +14,7 @@ metadata:
 
 Help the user explore and deepen their understanding of existing learning entries in the `.decodie/` directory.
 
-This mode is **read-only** with respect to `.decodie/` data. Do not create, modify, or delete entries.
+This mode is **read-only** with respect to `.decodie/` data.
 
 ## Entry Resolution
 
@@ -30,7 +30,7 @@ Resolve which entry the question targets using this priority:
 Once the target entry is identified, load:
 
 - **Entry content** — Full entry from the session file: `explanation`, `code_snippet`, `alternatives_considered`, `key_concepts`.
-- **Live source code** — Read referenced source files from `references` array to get current-state context.
+- **Live source code** — For files listed in the entry's `references` array, read the referenced sections to provide current-state context.
 - **External documentation** — URLs from `external_docs` for reference.
 
 ## Response Instructions
@@ -44,4 +44,4 @@ Once the target entry is identified, load:
 ## Important Notes
 
 - After answering, the interaction is complete. The user can ask again with another question.
-- Do not generate entries as a side effect of answering.
+- This mode only reads existing data — it does not generate entries.
