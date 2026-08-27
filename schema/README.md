@@ -78,6 +78,16 @@ Three optional fields support keeping entries in sync with the code they referen
 
 `/decodie:verify` does the deep check (reads files, confirms anchors still resolve) and updates `verified_sha`. `/decodie:flag-stale` does the cheap check (`git diff --name-only verified_sha..HEAD`) and is suitable for CI on every PR.
 
+### Output rules
+
+The `.decodie/rules/` directory holds free-form Markdown files that control how skills write documentation output. Each `.md` file is a standalone rule — the filename is the rule's name (e.g., `tone.md`, `brevity.md`, `audience.md`) and the content is natural-language instructions.
+
+Rules can control tone, language complexity, verbosity, structural preferences, target audience, or any other aspect of the written output. They apply to all content-producing skills: observe, analyze, explain, overview, and ask.
+
+Rules can also be defined globally at `~/.decodie/rules/*.md`. Global rules apply to all projects. When both global and project rules exist, all rules are additive — but if a project rule explicitly contradicts a global rule on the same topic, the project rule takes precedence.
+
+No schema is enforced on rule files. They are free-form text read and applied at the discretion of the AI agent.
+
 ### Overview entries
 
 Entries with `decision_type: "overview"` use a different content shape than the other decision types. Instead of `code_snippet` / `explanation` / `alternatives_considered` / `key_concepts`, an overview session entry carries:

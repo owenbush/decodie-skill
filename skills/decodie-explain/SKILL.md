@@ -16,6 +16,10 @@ Walk a developer through a specific piece of code they have selected or pasted. 
 
 This mode is **read-only with respect to source code** and **ephemeral by default** — nothing is written to `.decodie/` unless the user explicitly asks to save.
 
+## Setup
+
+**Load rules.** Check for `~/.decodie/rules/*.md` (global) and `.decodie/rules/*.md` (project). Read all `.md` files found. Treat their content as additional instructions controlling documentation output — tone, language, verbosity, format, audience. Project rules override global rules on conflict. If no rules exist, proceed with defaults.
+
 ## Scope and Inputs
 
 Operates on code the user has selected, pasted, or pointed at. Does not scan projects or discover files.
@@ -68,6 +72,7 @@ Only persist when the user explicitly requests it.
    - `.decodie/index.json` with `{ "version": "1.0", "project": "<directory-name>", "entries": [] }`
    - `.decodie/config.json` with default preferences
    - `.decodie/sessions/` directory
+   - `.decodie/rules/` directory
 
 2. Determine session ID. Find the highest `NNN` for today in `.decodie/sessions/` matching `explain-YYYY-MM-DD-NNN`, then increment.
 

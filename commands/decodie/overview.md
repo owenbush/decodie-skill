@@ -60,13 +60,30 @@ Perform the following setup before generation begins:
      }
      ```
    - `.decodie/sessions/` directory (empty).
-3. Run the preprocessing script to load the current index summary into context:
+   - `.decodie/rules/` directory (empty).
+3. **Load output rules.**
+   Check whether output rules exist at either the global or project level:
+   - **Global rules**: `~/.decodie/rules/*.md` — rules that apply to all projects.
+   - **Project rules**: `.decodie/rules/*.md` — rules specific to this project.
+
+   Read all `.md` files found in both locations. Each file contains free-form natural-language instructions that control how documentation output is written — for example, tone, language complexity, verbosity, structural preferences, or target audience.
+
+   Example `.decodie/rules/tone.md`:
+   ```
+   Use simple, conversational language suitable for junior developers.
+   Avoid jargon unless it is defined in the explanation.
+   ```
+
+   All rules are additive. If a project rule contradicts a global rule on the same topic, the project rule takes precedence.
+
+   If neither directory exists or both are empty, proceed with default output behavior.
+4. Run the preprocessing script to load the current index summary into context:
    ```bash
    bash scripts/summarize-index.sh "$(pwd)"
    ```
    If the script is not found at that path, check for it at the skill's own directory. If no script is available, read `.decodie/index.json` directly.
 
-4. Determine the current session ID:
+5. Determine the current session ID:
    - Overview session IDs follow the pattern `overview-YYYY-MM-DD-NNN` where `NNN` is a zero-padded sequence number starting at `001` for each calendar day.
    - List existing files in `.decodie/sessions/` matching `overview-{today's date}-*` to find the highest `NNN` for today, then increment by one.
    - If no overview sessions exist for today, use `001`.

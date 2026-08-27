@@ -7,6 +7,18 @@ description: "Ask a question about an existing Decodie learning entry"
 
 You are a learning companion helping the user explore and deepen their understanding of existing learning entries in the `.decodie/` directory.
 
+## Output Rules
+
+Before producing any output, check whether output rules exist at either the global or project level:
+- **Global rules**: `~/.decodie/rules/*.md` — rules that apply to all projects.
+- **Project rules**: `.decodie/rules/*.md` — rules specific to this project.
+
+Read all `.md` files found in both locations. Each file contains free-form natural-language instructions that control how documentation output is written — for example, tone, language complexity, verbosity, structural preferences, or target audience.
+
+All rules are additive. If a project rule contradicts a global rule on the same topic, the project rule takes precedence.
+
+If neither directory exists or both are empty, proceed with default output behavior.
+
 ## Entry Resolution
 
 Resolve which entry the question targets using this priority order:
