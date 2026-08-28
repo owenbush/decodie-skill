@@ -36,14 +36,17 @@ Parse the target and mode:
    - `.decodie/index.json` with `{ "version": "1.0", "project": "<directory-name>", "entries": [] }`
    - `.decodie/config.json` with default preferences
    - `.decodie/sessions/` directory
+   - `.decodie/rules/` directory
 
-2. Load the index summary for duplicate detection. Run:
+2. **Load rules.** Check for `~/.decodie/rules/*.md` (global) and `.decodie/rules/*.md` (project). Read all `.md` files found. Treat their content as additional instructions controlling documentation output — tone, language, verbosity, format, audience. Project rules override global rules on conflict. If no rules exist, proceed with defaults.
+
+3. Load the index summary for duplicate detection. Run:
    ```bash
    bash scripts/summarize-index.sh "$(pwd)"
    ```
    If unavailable, read `.decodie/index.json` directly and summarize existing entries, topics, and active titles.
 
-3. Determine session ID. Find the highest `NNN` for today in `.decodie/sessions/` matching `analyze-YYYY-MM-DD-NNN`, then increment.
+4. Determine session ID. Find the highest `NNN` for today in `.decodie/sessions/` matching `analyze-YYYY-MM-DD-NNN`, then increment.
 
 ## File Discovery
 

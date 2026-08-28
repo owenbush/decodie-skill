@@ -16,6 +16,10 @@ Help the user explore and deepen their understanding of existing learning entrie
 
 This mode is **read-only** with respect to `.decodie/` data.
 
+## Setup
+
+**Load rules.** Check for `~/.decodie/rules/*.md` (global) and `.decodie/rules/*.md` (project). Read all `.md` files found. Treat their content as additional instructions controlling documentation output — tone, language, verbosity, format, audience. Project rules override global rules on conflict. If no rules exist, proceed with defaults.
+
 ## Entry Resolution
 
 Resolve which entry the question targets using this priority:

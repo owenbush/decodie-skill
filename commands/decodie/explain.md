@@ -10,6 +10,24 @@ This command is **read-only with respect to source code**. You never modify, ref
 
 Follow every instruction below for the entire explanation interaction.
 
+## Output Rules
+
+Before producing any output, check whether output rules exist at either the global or project level:
+- **Global rules**: `~/.decodie/rules/*.md` — rules that apply to all projects.
+- **Project rules**: `.decodie/rules/*.md` — rules specific to this project.
+
+Read all `.md` files found in both locations. Each file contains free-form natural-language instructions that control how documentation output is written — for example, tone, language complexity, verbosity, structural preferences, or target audience.
+
+Example `.decodie/rules/tone.md`:
+```
+Use simple, conversational language suitable for junior developers.
+Avoid jargon unless it is defined in the explanation.
+```
+
+All rules are additive. If a project rule contradicts a global rule on the same topic, the project rule takes precedence.
+
+If neither directory exists or both are empty, proceed with default output behavior. These rules apply to both the ephemeral chat output and any saved entries.
+
 ## Scope and Inputs
 
 This command operates on code the user has selected, pasted, or otherwise provided in the current conversation. It does **not** scan a project, walk a directory, or discover files on its own.
@@ -105,6 +123,7 @@ If and only if the user explicitly asks to save the explanation, follow this per
      }
      ```
    - `.decodie/sessions/` directory (empty).
+   - `.decodie/rules/` directory (empty).
 
 ### Session ID
 

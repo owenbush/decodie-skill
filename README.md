@@ -62,6 +62,9 @@ The skills create a `.decodie/` directory at the project root with the following
 .decodie/
 ├── config.json                  # User preferences (experience level, topic filters)
 ├── index.json                   # Lightweight index of all entries (metadata only)
+├── rules/                       # Output rules (optional, user-created)
+│   ├── tone.md
+│   └── ...
 └── sessions/
     ├── 2026-03-27-001.json      # Full entries from session 1
     ├── 2026-03-27-002.json      # Full entries from session 2
@@ -71,6 +74,7 @@ The skills create a `.decodie/` directory at the project root with the following
 - **`index.json`** -- contains metadata for every entry: title, topics, experience level, code references, external doc links, and lifecycle state.
 - **`sessions/*.json`** -- contain the full content of each entry: code snippets, explanations, alternatives considered, and key concepts.
 - **`config.json`** -- user preferences such as preferred/excluded topics and archival thresholds.
+- **`rules/*.md`** -- optional output rules that control tone, language, verbosity, and format of generated documentation.
 
 ### Adding `.decodie/` to version control
 
@@ -87,6 +91,37 @@ You can commit `.decodie/` to share learning entries with your team, or add it t
 | `decodie-ask` | Ask questions about existing entries |
 | `decodie-verify` | Confirm entries still match source code and stamp with commit SHA |
 | `decodie-flag-stale` | Fast CI-friendly check for entries affected by recent changes |
+
+## Output rules
+
+You can control the tone, language, verbosity, and format of generated documentation by adding rule files to `.decodie/rules/`. Each `.md` file is a standalone rule written in plain natural language.
+
+### Project rules
+
+Create `.decodie/rules/` in your project and add `.md` files:
+
+`.decodie/rules/tone.md`:
+```
+Use simple, conversational language suitable for junior developers.
+Avoid jargon unless it is defined in the explanation.
+```
+
+`.decodie/rules/brevity.md`:
+```
+Keep explanations concise — aim for 2-3 sentences for the main explanation.
+Use bullet points for key concepts rather than prose paragraphs.
+```
+
+### Global rules
+
+Rules placed in `~/.decodie/rules/*.md` apply to all projects. Project rules take precedence over global rules when they conflict.
+
+### How rules work
+
+- Every content-producing skill (observe, analyze, explain, overview, ask) reads rules during setup.
+- Rules are additive — multiple rule files combine to form the full set of output instructions.
+- No schema is enforced — rules are free-form text, so you can control any aspect of the output.
+- The `rules/` directory is created automatically when a skill bootstraps `.decodie/` for the first time.
 
 ## Viewing your entries
 
